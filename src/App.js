@@ -5,6 +5,7 @@ import FilterItems from "./Components/FilterItems/FilterItems";
 
 
 const App = () => {
+
   return (
     <>
       <h1>PhoneBook</h1>

@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import {PhonebookContext} from '../Context/Context';
+import { connect } from 'react-redux';
+import { removeName} from "../../redux/contacts/contactsAction";
 
-const ContactsListItem = () => {
+const ContactsListItem = ({removeName}) => {
 
-  const {filterFunc , removeName} = useContext(PhonebookContext);
+  const {filterFunc} = useContext(PhonebookContext);
   return (
     <>
       {filterFunc.map((contact) => (
@@ -25,4 +27,9 @@ const ContactsListItem = () => {
   );
 };
 
-export default ContactsListItem;
+const mapDispatchToProps = {
+  removeName,
+};
+
+
+export default connect(null, mapDispatchToProps)(ContactsListItem);
