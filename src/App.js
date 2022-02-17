@@ -1,32 +1,20 @@
 import { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
+import { connect} from "react-redux"
 import "./App.css";
 import Form from "./Components/Form/Form";
 import ContactsListItem from "./Components/ContactsListItem/ContactsListItem";
 import FilterItems from "./Components/FilterItems/FilterItems";
-const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    const localStorageData = JSON.parse(localStorage.getItem("contacts"));
-    if (localStorageData) {
-      return localStorageData;
-    } else {
-      return [];
-    }
-  });
+import {addContact, filterValue} from './redux/contacts/contactsAction';
+
+const App = ({addContactProp, contacts, filterValueProp, filter}) => {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
-  const [filter, setFilter] = useState("");
-
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
-  }, [contacts]);
-
+ 
   const filterItems = (query) => {
-    console.log(contacts);
     return contacts.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()) && item);
   };
-  const removeName = (name) => setContacts(contacts.filter((el) => el.name.toLowerCase() !== name.toLowerCase()));
-
+  
   const onInputValue = (e) => {
     const { name, value } = e.target;
     switch (name) {
@@ -37,16 +25,13 @@ const App = () => {
         setNumber(value);
         break;
       case "filter":
-        setFilter(value);
+        filterValueProp(value);
         break;
       default:
         return;
     }
   };
 
-  const addContact = (contact) => {
-    setContacts((prev) => [...prev, contact]);
-  };
   const onBtnSubmit = (e) => {
     e.preventDefault();
     const newContact = {
@@ -56,7 +41,7 @@ const App = () => {
     };
     const dublicate = contacts.some((el) => el.name.toLowerCase() === name.toLowerCase());
     if (!dublicate) {
-      return addContact(newContact);
+      return addContactProp(newContact);
     } else {
       alert(`${name} alredy in contacts`);
     }
@@ -68,10 +53,24 @@ const App = () => {
       <h2>Contacts</h2>
       <FilterItems filter={filter} onInputValue={onInputValue} />
       <ul>
-        <ContactsListItem filter={filterItems(filter)} removeName={removeName} />
+        <ContactsListItem  filter={filterItems(filter)}/>
       </ul>
     </>
   );
 };
 
-export default App;
+const mapSTP = (state) => {
+  console.log(state);
+  return{
+    contacts: state.contacts.items,
+    filter: state.contacts.filter
+  }
+  
+}
+
+const mapDispatchToProps = {
+  addContactProp: addContact,
+  filterValueProp: filterValue
+}
+
+export default connect(mapSTP, mapDispatchToProps)(App);

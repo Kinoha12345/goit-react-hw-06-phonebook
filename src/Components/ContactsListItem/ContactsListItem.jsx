@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import { connect } from "react-redux"
+import {removeName} from '../../redux/contacts/contactsAction.js';
 const ContactsListItem = ({ filter, removeName }) => {
   return (
     <>
@@ -31,4 +33,8 @@ ContactsListItem.prototypes = {
     })
   ).isRequired,
 };
-export default ContactsListItem;
+
+const mapDispatchToProps = {
+  removeName: removeName
+}
+export default connect(null,mapDispatchToProps)(ContactsListItem);
