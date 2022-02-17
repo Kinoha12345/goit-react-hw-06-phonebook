@@ -1,8 +1,5 @@
-import { useContext } from "react";
-import {PhonebookContext} from '../Context/Context';
-const Form = () => {
-
-  const { onInputValue, onBtnSubmit } = useContext(PhonebookContext);
+import PropTypes from 'prop-types';
+const Form = ({onInputValue,onBtnSubmit}) => {
     return ( 
      <>
      <h2>Name</h2>
@@ -29,5 +26,9 @@ const Form = () => {
       );
      
 }
-
+Form.propTypes={
+  onInputValue:PropTypes.func.isRequired, 
+  onBtnSubmit:PropTypes.func.isRequired, 
+  // onTelValue:PropTypes.func.isRequired, 
+}
 export default Form;

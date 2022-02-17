@@ -1,14 +1,8 @@
-import { useContext } from "react";
-import {PhonebookContext} from '../Context/Context';
-import { connect } from 'react-redux';
-import { removeName} from "../../redux/contacts/contactsAction";
-
-const ContactsListItem = ({removeName}) => {
-
-  const {filterFunc} = useContext(PhonebookContext);
+import PropTypes from "prop-types";
+const ContactsListItem = ({ filter, removeName }) => {
   return (
     <>
-      {filterFunc.map((contact) => (
+      {filter.map((contact) => (
         <li key={contact.id}>
           <p>
             {contact.name}:{contact.number}
@@ -27,9 +21,14 @@ const ContactsListItem = ({removeName}) => {
   );
 };
 
-const mapDispatchToProps = {
-  removeName,
+ContactsListItem.prototypes = {
+  filter: PropTypes.string.isRequired,
+  removeName: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      contact: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
-
-
-export default connect(null, mapDispatchToProps)(ContactsListItem);
+export default ContactsListItem;
